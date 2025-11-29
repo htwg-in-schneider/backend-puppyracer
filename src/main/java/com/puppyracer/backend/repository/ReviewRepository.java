@@ -1,4 +1,4 @@
-package main.java.repository;
+package com.puppyracer.backend.repository;
 
 import com.puppyracer.backend.model.Review;
 import org.springframework.data.jpa.repository.JpaRepository;

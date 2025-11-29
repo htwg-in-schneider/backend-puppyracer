@@ -1,4 +1,4 @@
-package main.java.model;
+package com.puppyracer.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -9,7 +9,9 @@ import java.util.Objects;
 @Entity
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Product {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
@@ -18,35 +20,27 @@ public class Product {
     private String category; // optional
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore // wichtig: verhindert Endlosschleifen beim Serialisieren
+    @JsonIgnore
     private List<Review> reviews;
 
-    // getter + setter
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getTitle() {
-        return title;
-    }
-    public void setTitle(String title) {
-        this.title = title;
-    }
-    public String getDescription() {
-        return description;
-    }
-    public void setDescription(String description) {
-        this.description = description; 
-    }
-    public double getPrice() {
-        return price;
-    }
-    public void setPrice(double price) {
-        this.price = price;
+    // Getter + Setter
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
+
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+
+    public double getPrice() { return price; }
+    public void setPrice(double price) { this.price = price; }
+
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
+
+    public List<Review> getReviews() { return reviews; }
+    public void setReviews(List<Review> reviews) { this.reviews = reviews; }
 
     @Override
     public boolean equals(Object o) {
@@ -58,7 +52,7 @@ public class Product {
 
     @Override
     public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+        return Objects.hash(id);
     }
 
     @Override
@@ -67,9 +61,8 @@ public class Product {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", category=" + category +
+                ", category='" + category + '\'' +
                 ", price=" + price +
-                ", imageUrl='" + imageUrl + '\'' +
                 '}';
     }
 }

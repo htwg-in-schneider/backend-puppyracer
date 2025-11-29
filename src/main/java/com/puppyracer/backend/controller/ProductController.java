@@ -1,4 +1,4 @@
-package main.java.controller;
+package com.puppyracer.backend.controller;
 
 import com.puppyracer.backend.model.Product;
 import com.puppyracer.backend.repository.ProductRepository;

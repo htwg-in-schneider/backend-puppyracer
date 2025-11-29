@@ -1,4 +1,4 @@
-package main.java.config;
+package com.puppyracer.backend.config;
 
 import com.puppyracer.backend.model.Product;
 import com.puppyracer.backend.model.Review;
