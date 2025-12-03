@@ -1,0 +1,13 @@
+com/puppyracer/backend/config/CorsConfig$1.class
+com/puppyracer/backend/controller/ProductController.class
+com/puppyracer/backend/repository/ProductRepository.class
+com/puppyracer/backend/PuppyracerBackendApplication.class
+com/puppyracer/backend/model/Category.class
+com/puppyracer/backend/config/DataLoader.class
+com/puppyracer/backend/model/Review.class
+com/puppyracer/backend/config/CorsConfig.class
+com/puppyracer/backend/config/WebConfig.class
+com/puppyracer/backend/controller/CategoryController.class
+com/puppyracer/backend/model/Product.class
+com/puppyracer/backend/repository/ReviewRepository.class
+com/puppyracer/backend/controller/ReviewController.class

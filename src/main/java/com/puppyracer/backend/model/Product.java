@@ -18,6 +18,7 @@ public class Product {
     private String description;
     private double price;
     private String category; 
+    private String imageUrl;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
@@ -38,6 +39,14 @@ public class Product {
 
     public String getCategory() { return category; }
     public void setCategory(String category) { this.category = category; }
+
+    public String getImageUrl() {
+    return imageUrl;
+}
+
+public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
+}
 
     public List<Review> getReviews() { return reviews; }
     public void setReviews(List<Review> reviews) { this.reviews = reviews; }
@@ -63,6 +72,7 @@ public class Product {
                 ", description='" + description + '\'' +
                 ", category='" + category + '\'' +
                 ", price=" + price +
+                ", imageUrl='" + imageUrl + '\'' +
                 '}';
     }
 }
