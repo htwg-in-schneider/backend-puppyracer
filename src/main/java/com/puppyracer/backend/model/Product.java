@@ -17,7 +17,7 @@ public class Product {
     private String title;
     private String description;
     private double price;
-    private String category; // optional
+    private String category; 
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore

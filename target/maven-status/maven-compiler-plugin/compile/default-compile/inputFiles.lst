@@ -1,9 +1,0 @@
-/Users/jonasneugebauer/Desktop/Studium WIN/Semester 4/Web-Technologien/backend-puppyracer/backend-puppyracer/src/main/java/com/puppyracer/backend/PuppyracerBackendApplication.java
-/Users/jonasneugebauer/Desktop/Studium WIN/Semester 4/Web-Technologien/backend-puppyracer/backend-puppyracer/src/main/java/com/puppyracer/backend/config/DataLoader.java
-/Users/jonasneugebauer/Desktop/Studium WIN/Semester 4/Web-Technologien/backend-puppyracer/backend-puppyracer/src/main/java/com/puppyracer/backend/config/WebConfig.java
-/Users/jonasneugebauer/Desktop/Studium WIN/Semester 4/Web-Technologien/backend-puppyracer/backend-puppyracer/src/main/java/com/puppyracer/backend/controller/ProductController.java
-/Users/jonasneugebauer/Desktop/Studium WIN/Semester 4/Web-Technologien/backend-puppyracer/backend-puppyracer/src/main/java/com/puppyracer/backend/controller/ReviewController.java
-/Users/jonasneugebauer/Desktop/Studium WIN/Semester 4/Web-Technologien/backend-puppyracer/backend-puppyracer/src/main/java/com/puppyracer/backend/model/Product.java
-/Users/jonasneugebauer/Desktop/Studium WIN/Semester 4/Web-Technologien/backend-puppyracer/backend-puppyracer/src/main/java/com/puppyracer/backend/model/Review.java
-/Users/jonasneugebauer/Desktop/Studium WIN/Semester 4/Web-Technologien/backend-puppyracer/backend-puppyracer/src/main/java/com/puppyracer/backend/repository/ProductRepository.java
-/Users/jonasneugebauer/Desktop/Studium WIN/Semester 4/Web-Technologien/backend-puppyracer/backend-puppyracer/src/main/java/com/puppyracer/backend/repository/ReviewRepository.java
