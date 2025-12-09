@@ -17,7 +17,11 @@ public class Product {
     private String title;
     private String description;
     private double price;
-    private String category; 
+    
+    // ÄNDERUNG: Von String zu Enum
+    @Enumerated(EnumType.STRING)
+    private Category category;  // Jetzt Category Enum
+    
     private String imageUrl;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -37,16 +41,17 @@ public class Product {
     public double getPrice() { return price; }
     public void setPrice(double price) { this.price = price; }
 
-    public String getCategory() { return category; }
-    public void setCategory(String category) { this.category = category; }
+    // ÄNDERUNG: Category Getter/Setter
+    public Category getCategory() { return category; }
+    public void setCategory(Category category) { this.category = category; }
 
     public String getImageUrl() {
-    return imageUrl;
-}
+        return imageUrl;
+    }
 
-public void setImageUrl(String imageUrl) {
-    this.imageUrl = imageUrl;
-}
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
     public List<Review> getReviews() { return reviews; }
     public void setReviews(List<Review> reviews) { this.reviews = reviews; }

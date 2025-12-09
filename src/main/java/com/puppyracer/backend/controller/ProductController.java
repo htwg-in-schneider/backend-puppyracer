@@ -1,6 +1,7 @@
 package com.puppyracer.backend.controller;
 
 import com.puppyracer.backend.model.Product;
+import com.puppyracer.backend.model.Category; // Import hinzufügen
 import com.puppyracer.backend.repository.ProductRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,24 +19,42 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<Product> getProducts(
+    public ResponseEntity<List<Product>> getProducts(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String category) {
 
-        if (name != null && category != null) {
-            return productRepository
-                    .findByTitleContainingIgnoreCaseAndCategoryIgnoreCase(name, category);
+        try {
+            List<Product> products;
+            
+            if (name != null && !name.trim().isEmpty() && 
+                category != null && !category.trim().isEmpty()) {
+                // Beide Filter: Name UND Kategorie
+                Category catEnum = Category.fromApiValue(category.toLowerCase());
+                products = productRepository.findByTitleContainingIgnoreCaseAndCategory(
+                    name, catEnum);
+                    
+            } else if (name != null && !name.trim().isEmpty()) {
+                // Nur Name-Filter
+                products = productRepository.findByTitleContainingIgnoreCase(name);
+                
+            } else if (category != null && !category.trim().isEmpty()) {
+                // Nur Kategorie-Filter
+                Category catEnum = Category.fromApiValue(category.toLowerCase());
+                products = productRepository.findByCategory(catEnum);
+                
+            } else {
+                // Keine Filter: Alle Produkte
+                products = productRepository.findAll();
+            }
+            
+            return ResponseEntity.ok(products);
+            
+        } catch (IllegalArgumentException e) {
+            // Falls ungültige Kategorie angegeben wurde
+            return ResponseEntity.badRequest().body(null);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(null);
         }
-
-        if (name != null) {
-            return productRepository.findByTitleContainingIgnoreCase(name);
-        }
-
-        if (category != null) {
-            return productRepository.findByCategoryIgnoreCase(category);
-        }
-
-        return productRepository.findAll();
     }
 
     @GetMapping("/{id}")
@@ -47,6 +66,10 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<Product> create(@RequestBody Product product) {
+        // Optional: Validierung der Kategorie
+        if (product.getCategory() == null) {
+            return ResponseEntity.badRequest().build();
+        }
         return ResponseEntity.status(201).body(productRepository.save(product));
     }
 
@@ -56,8 +79,9 @@ public class ProductController {
                 .map(existing -> {
                     existing.setTitle(product.getTitle());
                     existing.setDescription(product.getDescription());
-                    existing.setCategory(product.getCategory());
+                    existing.setCategory(product.getCategory()); // Jetzt Category Enum
                     existing.setPrice(product.getPrice());
+                    existing.setImageUrl(product.getImageUrl());
                     return ResponseEntity.ok(productRepository.save(existing));
                 })
                 .orElse(ResponseEntity.notFound().build());
