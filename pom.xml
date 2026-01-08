@@ -66,14 +66,6 @@
 			<scope>test</scope>
 		</dependency>
 		
-		<!-- Database Drivers -->
-		<!-- H2 für lokale Entwicklung -->
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		
 		<!-- 🆕 MARIA DB FÜR PRODUKTION (BISCHOFSCLOUD) -->
 		<dependency>
 			<groupId>org.mariadb.jdbc</groupId>
