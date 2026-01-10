@@ -3,6 +3,7 @@ package com.puppyracer.backend.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import java.time.LocalDateTime;
 
 @Entity
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
@@ -31,6 +32,10 @@ public class Review {
     @JsonIgnoreProperties({"reviews"})
     private User user;
 
+    // NEU: Erstellungsdatum für Sortierung
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
     // Getter + Setter
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -47,8 +52,19 @@ public class Review {
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
 
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
     // Hilfsmethode für den Username
     public String getUserName() {
         return user != null ? user.getName() : null;
+    }
+
+    // Automatisches Setzen des Erstellungsdatums
+    @PrePersist
+    protected void onCreate() {
+        if (createdAt == null) {
+            createdAt = LocalDateTime.now();
+        }
     }
 }

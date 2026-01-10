@@ -4,7 +4,6 @@ com/puppyracer/backend/controller/ProductController.class
 com/puppyracer/backend/model/Category.class
 com/puppyracer/backend/model/OrderItem.class
 com/puppyracer/backend/config/WebConfig$1.class
-com/puppyracer/backend/controller/ProductController$CheckoutRequest.class
 com/puppyracer/backend/repository/OrderRepository.class
 com/puppyracer/backend/model/Order.class
 com/puppyracer/backend/model/Review.class
@@ -12,7 +11,6 @@ com/puppyracer/backend/controller/CategoryController.class
 com/puppyracer/backend/model/Product.class
 com/puppyracer/backend/controller/UserController.class
 com/puppyracer/backend/repository/UserRepository.class
-com/puppyracer/backend/controller/ProductController$CheckoutItem.class
 com/puppyracer/backend/model/User.class
 com/puppyracer/backend/controller/OrderController.class
 com/puppyracer/backend/repository/ProductRepository.class
