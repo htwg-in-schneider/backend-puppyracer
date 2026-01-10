@@ -32,10 +32,12 @@ public class SecurityConfig {
                 // 🔓 PRODUKTE LESEN (alle)
                 .requestMatchers(HttpMethod.GET, "/api/product/**").permitAll()
                 
-                // 🔐 PRODUKTE SCHREIBEN (nur ADMIN) ← WICHTIG: KEINE ROLE-CHECK HIER!
-                .requestMatchers(HttpMethod.POST, "/api/product/**").authenticated()
-                .requestMatchers(HttpMethod.PUT, "/api/product/**").authenticated()
-                .requestMatchers(HttpMethod.DELETE, "/api/product/**").authenticated()
+                // NEU (mit Rollenprüfung):
+                .requestMatchers(HttpMethod.POST, "/api/product/**").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/api/product/**").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/product/**").hasAuthority("ADMIN")
+                .requestMatchers("/api/users/**").hasAuthority("ADMIN")
+                .requestMatchers("/api/orders/admin/**").hasAuthority("ADMIN")
                 
                 // 🔐 PROFIL (nur authentifiziert)
                 .requestMatchers(HttpMethod.GET, "/api/profile").authenticated()
@@ -44,8 +46,6 @@ public class SecurityConfig {
                 // 🔐 USER MANAGEMENT (authentifiziert) ← Rolle prüft Controller
                 .requestMatchers("/api/users/**").authenticated()
                 
-                // 🔐 ORDERS ADMIN (authentifiziert) ← Rolle prüft Controller
-                .requestMatchers("/api/orders/admin/**").authenticated()
                 
                 // 🔐 ORDERS USER (authentifiziert)
                 .requestMatchers(HttpMethod.GET, "/api/orders/my-orders").authenticated()
