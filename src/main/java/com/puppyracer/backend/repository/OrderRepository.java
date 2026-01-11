@@ -15,6 +15,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     
     // Alle Bestellungen, sortiert nach Datum (neueste zuerst)
     List<Order> findAllByOrderByOrderDateDesc();
+
+     List<Order> findByUser(User user);
     
     // Bestellung anhand der Bestellnummer finden
     Order findByOrderNumber(String orderNumber);

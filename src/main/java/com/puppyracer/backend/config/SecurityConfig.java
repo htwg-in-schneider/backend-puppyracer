@@ -29,26 +29,34 @@ public class SecurityConfig {
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/error").permitAll()
                 
-                // 🔓 PRODUKTE LESEN (alle)
+                // 🔓 PRODUKTE LESEN (alle) - laut PDF Seite 36
                 .requestMatchers(HttpMethod.GET, "/api/product/**").permitAll()
                 
-                // NEU (mit Rollenprüfung):
-                .requestMatchers(HttpMethod.POST, "/api/product/**").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.PUT, "/api/product/**").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/api/product/**").hasAuthority("ADMIN")
-                .requestMatchers("/api/users/**").hasAuthority("ADMIN")
-                .requestMatchers("/api/orders/admin/**").hasAuthority("ADMIN")
+                // 🔐 PRODUKTE SCHREIBEN (nur authentifiziert) - laut PDF Seite 36
+                .requestMatchers(HttpMethod.POST, "/api/product/**").authenticated()
+                .requestMatchers(HttpMethod.PUT, "/api/product/**").authenticated()
+                .requestMatchers(HttpMethod.DELETE, "/api/product/**").authenticated()
                 
-                // 🔐 PROFIL (nur authentifiziert)
-                .requestMatchers(HttpMethod.GET, "/api/profile").authenticated()
-                .requestMatchers(HttpMethod.PUT, "/api/profile").authenticated()
-                
-                // 🔐 USER MANAGEMENT (authentifiziert) ← Rolle prüft Controller
+                // 🔐 USER MANAGEMENT (authentifiziert)
+                // Die ROLLE prüft der Controller selbst! (PDF Seite 34-35)
                 .requestMatchers("/api/users/**").authenticated()
                 
+                // 🔐 ORDERS ADMIN (authentifiziert)
+                // Die ROLLE prüft der Controller selbst!
+                .requestMatchers("/api/orders/admin/**").authenticated()
                 
-                // 🔐 ORDERS USER (authentifiziert)
-                .requestMatchers(HttpMethod.GET, "/api/orders/my-orders").authenticated()
+                // 🔐 ORDERS USER (authentifizierte User)
+                .requestMatchers("/api/orders/my-orders").authenticated()
+                
+                // 🔐 PROFIL (authentifizierte User)
+                .requestMatchers("/api/profile").authenticated()
+                
+                // 🔐 CHECKOUT (authentifizierte User)
+                .requestMatchers(HttpMethod.POST, "/api/product/checkout").authenticated()
+                
+                // 🔐 REVIEWS (authentifizierte User)
+                .requestMatchers(HttpMethod.POST, "/api/review/**").authenticated()
+                .requestMatchers(HttpMethod.DELETE, "/api/review/**").authenticated()
                 
                 // 🔐 ALLE ANDEREN API ENDPUNKTE
                 .requestMatchers("/api/**").authenticated()
@@ -57,7 +65,7 @@ public class SecurityConfig {
                 .anyRequest().permitAll()
             )
             
-            // KEIN JWT Converter! Einfache JWT Validierung
+            // OAuth2/JWT Resource Server - laut PDF Seite 29
             .oauth2ResourceServer(oauth2 -> oauth2
                 .jwt(Customizer.withDefaults())
             )

@@ -7,6 +7,7 @@ import com.puppyracer.backend.repository.UserRepository;
 import com.puppyracer.backend.model.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
@@ -30,97 +31,96 @@ public class OrderController {
     
     // ============ HELPER METHOD ============
     private boolean userFromJwtIsAdmin(Jwt jwt) {
-        log.info("Checking if user is admin...");
-        
         if (jwt == null) {
-            log.error("JWT is null");
             return false;
         }
         
         String oauthId = jwt.getSubject();
-        log.info("OAuth ID from JWT: {}", oauthId);
-        
         if (oauthId == null) {
-            log.error("OAuth ID is null");
             return false;
         }
         
         Optional<User> user = userRepository.findByOauthId(oauthId);
-        
-        if (user.isEmpty()) {
-            log.error("User not found in DB for OAuth ID: {}", oauthId);
-            return false;
-        }
-        
-        boolean isAdmin = user.get().getRole() == Role.ADMIN;
-        log.info("User role: {}, Is admin: {}", user.get().getRole(), isAdmin);
-        
-        return isAdmin;
+        return user.isPresent() && user.get().getRole() == Role.ADMIN;
+    }
+    
+    private User getUserFromJwt(Jwt jwt) {
+        String oauthId = jwt.getSubject();
+        return userRepository.findByOauthId(oauthId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
     
     // ===================== ADMIN ENDPOINTS =====================
     
     @GetMapping("/admin")
-    public List<Order> getAllOrdersAdmin(@AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<List<Order>> getAllOrdersAdmin(@AuthenticationPrincipal Jwt jwt) {
         log.info("GET /api/orders/admin called");
         
         if (!userFromJwtIsAdmin(jwt)) {
             log.error("Access denied - User is not admin");
-            throw new org.springframework.security.access.AccessDeniedException("Access denied");
+            return ResponseEntity.status(403).build();
         }
         
-        List<Order> orders = orderRepository.findAllByOrderByOrderDateDesc();
+        List<Order> orders = orderRepository.findAll();
         log.info("Returning {} orders for admin", orders.size());
-        return orders;
+        return ResponseEntity.ok(orders);
     }
     
-    @PutMapping("/admin/{id}/status")
-    public Order updateOrderStatus(
+    @PutMapping("/{id}/status")
+    public ResponseEntity<Order> updateOrderStatus(
             @AuthenticationPrincipal Jwt jwt,
             @PathVariable Long id,
-            @RequestBody String newStatus) {
+            @RequestBody StatusUpdateRequest statusUpdate) {
         
-        log.info("PUT /api/orders/admin/{}/status called", id);
+        log.info("PUT /api/orders/{}/status called", id);
         
         if (!userFromJwtIsAdmin(jwt)) {
             log.error("Access denied - User is not admin");
-            throw new org.springframework.security.access.AccessDeniedException("Access denied");
+            return ResponseEntity.status(403).build();
         }
         
         Order order = orderRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.error("Order not found with ID: {}", id);
-                    return new RuntimeException("Bestellung nicht gefunden");
-                });
+                .orElseThrow(() -> new RuntimeException("Bestellung nicht gefunden"));
         
-        log.info("Updating order {} status from {} to {}", id, order.getStatus(), newStatus);
-        order.setStatus(newStatus);
+        order.setStatus(statusUpdate.getStatus());
+        Order savedOrder = orderRepository.save(order);
         
-        return orderRepository.save(order);
+        return ResponseEntity.ok(savedOrder);
     }
     
     // ===================== USER ENDPOINTS =====================
     
     @GetMapping("/my-orders")
-    public List<Order> getMyOrders(@AuthenticationPrincipal Jwt jwt) {
+    public ResponseEntity<List<Order>> getMyOrders(@AuthenticationPrincipal Jwt jwt) {
         log.info("GET /api/orders/my-orders called");
         
-        String oauthId = jwt.getSubject();
-        log.info("OAuth ID: {}", oauthId);
+        try {
+            User user = getUserFromJwt(jwt);
+            log.info("Found user: {} (Role: {})", user.getEmail(), user.getRole());
+            
+            // WICHTIG: Verwendet die findByUser Methode aus dem Repository
+            List<Order> orders = orderRepository.findByUser(user);
+            
+            log.info("Returning {} orders for user {}", orders.size(), user.getEmail());
+            return ResponseEntity.ok(orders);
+            
+        } catch (Exception e) {
+            log.error("Error getting user orders: {}", e.getMessage());
+            return ResponseEntity.status(403).build();
+        }
+    }
+    
+    // ===================== DTO =====================
+    
+    public static class StatusUpdateRequest {
+        private String status;
         
-        User user = userRepository.findByOauthId(oauthId)
-                .orElseThrow(() -> {
-                    log.error("User not found for OAuth ID: {}", oauthId);
-                    return new RuntimeException("User not found");
-                });
+        public String getStatus() {
+            return status;
+        }
         
-        log.info("👤 Found user: {} (Role: {})", user.getEmail(), user.getRole());
-        
-        // WICHTIG: Diese Methode muss in OrderRepository existieren!
-        // Falls nicht, ändere zu: return orderRepository.findByUser(user);
-        List<Order> orders = orderRepository.findByUserOrderByOrderDateDesc(user);
-        
-        log.info("Returning {} orders for user {}", orders.size(), user.getEmail());
-        return orders;
+        public void setStatus(String status) {
+            this.status = status;
+        }
     }
 }
