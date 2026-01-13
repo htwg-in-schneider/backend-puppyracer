@@ -16,60 +16,66 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-            .cors(Customizer.withDefaults())
+            .cors(Customizer.withDefaults())  // WICHTIG: Laut Go-Live-Checkliste
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             
-            // ============ AUTORISIERUNG ============
+            // ============ AUTHORIZATION ============
             .authorizeHttpRequests(auth -> auth
-                // 🔓 ÖFFENTLICHE ENDPUNKTE
+                // ÖFFENTLICHE ENDPUNKTE
                 .requestMatchers("/").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/error").permitAll()
+                .requestMatchers("/actuator/health").permitAll()  // Für Deployment-Health-Checks
                 
-                // 🔓 PRODUKTE LESEN (alle) - laut PDF Seite 36
+                // PRODUKTE LESEN (alle)
+                .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/product/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/category/**").permitAll()
                 
-                // 🔐 PRODUKTE SCHREIBEN (nur authentifiziert) - laut PDF Seite 36
+                // PRODUKTE SCHREIBEN (nur authentifiziert)
                 .requestMatchers(HttpMethod.POST, "/api/product/**").authenticated()
                 .requestMatchers(HttpMethod.PUT, "/api/product/**").authenticated()
                 .requestMatchers(HttpMethod.DELETE, "/api/product/**").authenticated()
                 
-                // 🔐 USER MANAGEMENT (authentifiziert)
-                // Die ROLLE prüft der Controller selbst! (PDF Seite 34-35)
+                // USER MANAGEMENT (authentifiziert)
                 .requestMatchers("/api/users/**").authenticated()
                 
-                // 🔐 ORDERS ADMIN (authentifiziert)
-                // Die ROLLE prüft der Controller selbst!
+                // ORDERS ADMIN (authentifiziert)
                 .requestMatchers("/api/orders/admin/**").authenticated()
                 
-                // 🔐 ORDERS USER (authentifizierte User)
+                // ORDERS USER (authentifizierte User)
                 .requestMatchers("/api/orders/my-orders").authenticated()
+                .requestMatchers(HttpMethod.POST, "/api/orders").authenticated()
                 
-                // 🔐 PROFIL (authentifizierte User)
+                // PROFIL (authentifizierte User)
                 .requestMatchers("/api/profile").authenticated()
                 
-                // 🔐 CHECKOUT (authentifizierte User)
-                .requestMatchers(HttpMethod.POST, "/api/product/checkout").authenticated()
+                // CHECKOUT (authentifizierte User)
+                .requestMatchers(HttpMethod.POST, "/api/checkout").authenticated()
                 
-                // 🔐 REVIEWS (authentifizierte User)
+                // REVIEWS (authentifizierte User)
                 .requestMatchers(HttpMethod.POST, "/api/review/**").authenticated()
                 .requestMatchers(HttpMethod.DELETE, "/api/review/**").authenticated()
                 
-                // 🔐 ALLE ANDEREN API ENDPUNKTE
+                // STATISCHE RESSOURCEN
+                .requestMatchers(HttpMethod.GET, "/images/**").permitAll()
+                
+                // ALLE ANDEREN API ENDPUNKTE
                 .requestMatchers("/api/**").authenticated()
                 
-                // 🔓 ALLE ANDEREN REQUESTS
+                // ALLE ANDEREN REQUESTS
                 .anyRequest().permitAll()
             )
             
-            // OAuth2/JWT Resource Server - laut PDF Seite 29
+            // OAuth2/JWT Resource Server
             .oauth2ResourceServer(oauth2 -> oauth2
                 .jwt(Customizer.withDefaults())
             )
             
+            // H2 Console Frame Options
             .headers(headers -> headers
                 .frameOptions(frame -> frame.sameOrigin())
             )
