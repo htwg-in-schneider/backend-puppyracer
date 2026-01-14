@@ -16,39 +16,37 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-            .cors(Customizer.withDefaults())  // WICHTIG: Laut Checkliste
+            .cors(Customizer.withDefaults())  // Wichtig für Spring Security CORS Integration
+            
             .csrf(csrf -> csrf.disable())
+            
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             
-            // ============ AUTHORIZATION ============
+            // ============ CORS KONFIGURATION ============
+            // ZUERST CORS OPTIONS erlauben
             .authorizeHttpRequests(auth -> auth
-                // OPTIONS METHOD FÜR CORS PREFLIGHT ERLAUBEN (SEHR WICHTIG!)
+                // SEHR WICHTIG: OPTIONS vor allen anderen Regeln
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 
                 // ÖFFENTLICHE ENDPUNKTE
                 .requestMatchers("/").permitAll()
-                .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/error").permitAll()
                 .requestMatchers("/actuator/health").permitAll()
                 
-                // H2 CONSOLE STATISCHE RESSOURCEN
-                .requestMatchers("/h2-console/**").permitAll()
-                
                 // PRODUKTE LESEN (alle)
-                .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/product/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/category/**").permitAll()
-                
-                // ... Rest deiner Authorization bleibt gleich ...
                 
                 // PRODUKTE SCHREIBEN (nur authentifiziert)
                 .requestMatchers(HttpMethod.POST, "/api/product/**").authenticated()
                 .requestMatchers(HttpMethod.PUT, "/api/product/**").authenticated()
                 .requestMatchers(HttpMethod.DELETE, "/api/product/**").authenticated()
                 
-                // ... Rest deiner Regeln ...
+                // ALLE ANDEREN REQUESTES erfordern Authentifizierung
+                .anyRequest().authenticated()
             )
             
             .oauth2ResourceServer(oauth2 -> oauth2
@@ -56,7 +54,7 @@ public class SecurityConfig {
             )
             
             .headers(headers -> headers
-                .frameOptions(frame -> frame.sameOrigin())
+                .frameOptions(frame -> frame.disable())  // Für H2 Console wenn nötig
             )
             
             .build();
