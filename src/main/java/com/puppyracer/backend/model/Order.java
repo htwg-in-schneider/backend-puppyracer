@@ -40,9 +40,7 @@ public class Order {
     private Double totalAmount;
     
     @NotBlank(message = "Status ist erforderlich")
-    @Pattern(regexp = "PENDING|PAID|SHIPPED|DELIVERED|CANCELLED", 
-             message = "Status muss PENDING, PAID, SHIPPED, DELIVERED oder CANCELLED sein")
-    private String status;
+    private String status = "PENDING"; // Standardwert
     
     // Persönliche Daten
     @NotBlank(message = "Vorname ist erforderlich")
@@ -57,10 +55,7 @@ public class Order {
     @Email(message = "Ungültige E-Mail-Adresse")
     private String email;
     
-    @NotBlank(message = "Telefonnummer ist erforderlich")
-    @Pattern(regexp = "^[+]?[0-9\\s\\-()]{10,20}$", 
-             message = "Ungültige Telefonnummer")
-    private String phone;
+    private String phone = ""; // Optional
     
     // Lieferadresse
     @NotBlank(message = "Straße ist erforderlich")
@@ -76,14 +71,11 @@ public class Order {
     private String city;
     
     @NotBlank(message = "Land ist erforderlich")
-    @Size(min = 2, max = 50, message = "Land muss zwischen 2 und 50 Zeichen haben")
-    private String country;
+    private String country = "Deutschland"; // Standardwert
     
-    // Zahlungsmethode
+    // Zahlungsmethode - VEREINFACHT
     @NotBlank(message = "Zahlungsmethode ist erforderlich")
-    @Pattern(regexp = "PAYPAL|CREDITCARD|INVOICE|DEBIT", 
-             message = "Zahlungsmethode muss PAYPAL, CREDITCARD, INVOICE oder DEBIT sein")
-    private String paymentMethod;
+    private String paymentMethod = "INVOICE"; // Standardwert Rechnung
     
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"order"})
@@ -95,9 +87,11 @@ public class Order {
         this.orderDate = LocalDateTime.now();
         this.status = "PENDING";
         this.orderNumber = "ORD-" + System.currentTimeMillis() + "-" + (int)(Math.random() * 1000);
+        this.country = "Deutschland";
+        this.paymentMethod = "INVOICE";
     }
     
-    // Getter & Setter (bleiben gleich)
+    // Getter & Setter (alle vorhanden, gleiche wie vorher)
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     
@@ -147,7 +141,12 @@ public class Order {
     public void setCountry(String country) { this.country = country; }
     
     public String getPaymentMethod() { return paymentMethod; }
-    public void setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; }
+    public void setPaymentMethod(String paymentMethod) { 
+        // Akzeptiere verschiedene Schreibweisen, konvertiere zu uppercase
+        if (paymentMethod != null) {
+            this.paymentMethod = paymentMethod.toUpperCase();
+        }
+    }
     
     public List<OrderItem> getItems() { return items; }
     public void setItems(List<OrderItem> items) { this.items = items; }
