@@ -1,3 +1,14 @@
+package com.puppyracer.backend.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.SecurityFilterChain;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -5,23 +16,24 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-            .cors(Customizer.withDefaults())
+            .cors(Customizer.withDefaults())  // Wichtig für Spring Security CORS Integration
+            
             .csrf(csrf -> csrf.disable())
+            
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             
+            // ============ CORS KONFIGURATION ============
+            // ZUERST CORS OPTIONS erlauben
             .authorizeHttpRequests(auth -> auth
-                // OPTIONS für CORS (SEHR WICHTIG!)
+                // SEHR WICHTIG: OPTIONS vor allen anderen Regeln
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 
                 // ÖFFENTLICHE ENDPUNKTE
-                .requestMatchers("/", "/error", "/actuator/health").permitAll()
-                .requestMatchers("/h2-console/**").permitAll()  // Für H2
-                
-                // PROFILE ENDPOINT (für Frontend Admin-Check)
-                .requestMatchers(HttpMethod.GET, "/api/profile").authenticated()  // ← NEU!
-                .requestMatchers(HttpMethod.PUT, "/api/profile").authenticated()
+                .requestMatchers("/").permitAll()
+                .requestMatchers("/error").permitAll()
+                .requestMatchers("/actuator/health").permitAll()
                 
                 // PRODUKTE LESEN (alle)
                 .requestMatchers(HttpMethod.GET, "/api/product/**").permitAll()
@@ -33,11 +45,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT, "/api/product/**").authenticated()
                 .requestMatchers(HttpMethod.DELETE, "/api/product/**").authenticated()
                 
-                // BESTELLUNGEN (authentifiziert)
-                .requestMatchers("/api/order/**").authenticated()
-                .requestMatchers("/api/cart/**").authenticated()
-                
-                // ALLE ANDEREN erfordern Authentifizierung
+                // ALLE ANDEREN REQUESTES erfordern Authentifizierung
                 .anyRequest().authenticated()
             )
             
@@ -46,7 +54,7 @@ public class SecurityConfig {
             )
             
             .headers(headers -> headers
-                .frameOptions(frame -> frame.disable())
+                .frameOptions(frame -> frame.disable())  // Für H2 Console wenn nötig
             )
             
             .build();
