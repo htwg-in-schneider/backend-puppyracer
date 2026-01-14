@@ -45,7 +45,7 @@ public class DataLoader {
 
             Product leash2 = new Product();
             leash2.setTitle("Flexi-Retractable Leine");
-            leash2.setDescription("10m ausziehbare Leine mit ergonomischem Griff");
+            leash2.setDescription("10m meter ausziehbare Leine mit ergonomischem Griff");
             leash2.setPrice(29.99);
             leash2.setCategory(Category.LEINEN);
             leash2.setImageUrl("Hundeleine-rot.png");
@@ -53,7 +53,7 @@ public class DataLoader {
 
             Product harness = new Product();
             harness.setTitle("Hundeleine aus Stoff");
-            harness.setDescription("Schöne Stoffleine 2m Länge");
+            harness.setDescription("Schöne Stoffleine in rot/blau 2m Länge");
             harness.setPrice(42.99);
             harness.setCategory(Category.LEINEN);
             harness.setImageUrl("Hundeleine-Stoff.png");
@@ -62,7 +62,7 @@ public class DataLoader {
             // ===== HALSBÄNDER & HALSKETTEN =====
             Product collar1 = new Product();
             collar1.setTitle("Hundehalsband Türkis");
-            collar1.setDescription("Stylisches Halsband in Türkis, wasserfest");
+            collar1.setDescription("Schönes Halsband in Türkis, wasserfest");
             collar1.setPrice(22.99);
             collar1.setCategory(Category.HALSBAENDER);
             collar1.setImageUrl("Hundehalsband-Türkis.png");
@@ -77,8 +77,8 @@ public class DataLoader {
             productRepository.save(collar2);
 
             Product necklace = new Product();
-            necklace.setTitle("Louis Vuiton Halsband");
-            necklace.setDescription("Stilvolles Hundehalsband von LV mit Gravur");
+            necklace.setTitle("Louis Vuitton Halsband");
+            necklace.setDescription("Stilvolles Hundehalsband von Louis Vuitton mit Gravur");
             necklace.setPrice(60.00);
             necklace.setCategory(Category.HALSBAENDER);
             necklace.setImageUrl("Hundehalsband-premium.png");
@@ -102,8 +102,8 @@ public class DataLoader {
             productRepository.save(sweater);
 
             Product hoodie = new Product();
-            hoodie.setTitle("Kapuzenpullover mit Taschen");
-            hoodie.setDescription("Stylisher Regenjacke in Schwarz");
+            hoodie.setTitle("Regenjacke in schwarz");
+            hoodie.setDescription("Schöne Regenjacke in Schwarz");
             hoodie.setPrice(38.99);
             hoodie.setCategory(Category.BEKLEIDUNG);
             hoodie.setImageUrl("Hundejacke-Schwarz.png");
@@ -128,7 +128,7 @@ public class DataLoader {
 
             Product snack3 = new Product();
             snack3.setTitle("Nutrima");
-            snack3.setDescription("Für große Hunde reich an Vitaminen");
+            snack3.setDescription("Bio Futter, reich an Vitaminen");
             snack3.setPrice(15.99);
             snack3.setCategory(Category.SNACKS);
             snack3.setImageUrl("Nutrima-Futter.png");
