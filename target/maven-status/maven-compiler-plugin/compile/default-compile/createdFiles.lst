@@ -4,7 +4,6 @@ com/puppyracer/backend/controller/OrderController$StatusUpdateRequest.class
 com/puppyracer/backend/controller/ProductController.class
 com/puppyracer/backend/model/Category.class
 com/puppyracer/backend/model/OrderItem.class
-com/puppyracer/backend/config/WebConfig$1.class
 com/puppyracer/backend/repository/OrderRepository.class
 com/puppyracer/backend/model/Order.class
 com/puppyracer/backend/model/Review.class
