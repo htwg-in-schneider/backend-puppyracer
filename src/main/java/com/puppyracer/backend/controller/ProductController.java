@@ -25,7 +25,6 @@ public class ProductController {
         this.userRepository = userRepository;
     }
 
-    // ========== HELPER METHOD ==========
     private boolean userFromJwtIsAdmin(Jwt jwt) {
         if (jwt == null || jwt.getSubject() == null) {
             return false;
@@ -34,7 +33,6 @@ public class ProductController {
         return user.isPresent() && user.get().getRole() == Role.ADMIN;
     }
 
-    // ========== ÖFFENTLICHE ENDPUNKTE ==========
 
     @GetMapping
     public ResponseEntity<List<Product>> getProducts(
@@ -79,8 +77,6 @@ public class ProductController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-
-    // ========== ADMIN ENDPUNKTE ==========
 
     @PostMapping
     public ResponseEntity<?> createProduct(
@@ -167,8 +163,6 @@ public class ProductController {
                     .body(Map.of("error", "Fehler beim Löschen: " + e.getMessage()));
         }
     }
-
-    // ========== HILFSMETHODEN ==========
 
     private Map<String, String> getValidationErrors(BindingResult result) {
         Map<String, String> errors = new HashMap<>();

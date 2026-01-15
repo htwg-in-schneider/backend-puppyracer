@@ -47,7 +47,7 @@ public class UserController {
         // Nur bestimmte Felder dürfen geändert werden
         user.setName(updatedUser.getName());
         user.setEmail(updatedUser.getEmail());
-        user.setRole(updatedUser.getRole());  // Wichtig: Admin kann Rolle ändern!
+        user.setRole(updatedUser.getRole());  
         
         User savedUser = userRepository.save(user);
         return ResponseEntity.ok(savedUser);

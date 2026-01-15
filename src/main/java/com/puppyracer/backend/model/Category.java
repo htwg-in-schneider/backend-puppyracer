@@ -1,7 +1,7 @@
 package com.puppyracer.backend.model;
 
 public enum Category {
-    // WICHTIG: apiValue muss mit deinen Frontend-Werten übereinstimmen!
+
     LEINEN("leinen", "Leinen & Geschirre"),
     HALSBAENDER("halsbaender", "Halsbänder & Halsketten"),
     BEKLEIDUNG("bekleidung", "Hundebekleidung"),

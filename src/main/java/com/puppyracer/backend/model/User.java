@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "app_user")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // ← WICHTIG für JSON Serialisierung
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
 public class User {
     
     @Id
@@ -26,8 +26,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
-    
-    // ==== PROFILE FIELDS ====
+ 
     @Column(length = 20)
     private String phone;
     
@@ -35,10 +34,9 @@ public class User {
     private String address;
     
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonIgnore // ← VERSTECKT Orders komplett in JSON
+    @JsonIgnore 
     private List<Order> orders = new ArrayList<>();
     
-    // ===== KONSTRUKTOREN =====
     public User() {}
     
     public User(String email, String name, String oauthId, Role role) {
@@ -48,7 +46,6 @@ public class User {
         this.role = role;
     }
     
-    // Vollständiger Konstruktor
     public User(String email, String name, String oauthId, Role role, String phone, String address) {
         this.email = email;
         this.name = name;
@@ -58,7 +55,6 @@ public class User {
         this.address = address;
     }
     
-    // ===== GETTER & SETTER =====
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     
@@ -74,7 +70,6 @@ public class User {
     public Role getRole() { return role; }
     public void setRole(Role role) { this.role = role; }
     
-    // ==== PROFILE GETTER & SETTER ====
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }
     
@@ -83,8 +78,7 @@ public class User {
     
     public List<Order> getOrders() { return orders; }
     public void setOrders(List<Order> orders) { this.orders = orders; }
-    
-    // ===== HELPER METHODS =====
+
     public void addOrder(Order order) {
         orders.add(order);
         order.setUser(this);
@@ -94,7 +88,6 @@ public class User {
         return Role.ADMIN.equals(this.role);
     }
     
-    // ===== EQUALS & HASHCODE =====
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -108,8 +101,7 @@ public class User {
     public int hashCode() {
         return Objects.hash(id, oauthId);
     }
-    
-    // ===== TO STRING =====
+
     @Override
     public String toString() {
         return "User{" +

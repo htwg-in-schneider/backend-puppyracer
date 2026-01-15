@@ -15,13 +15,11 @@ public class CategoryController {
     
     @GetMapping
     public List<String> getCategories() {
-        // Gibt die neuen Kategorien zurück, die dein Frontend erwartet
         return Arrays.stream(Category.values())
                 .map(Category::getApiValue)
                 .collect(Collectors.toList());
     }
     
-    // Optional: Für kompatibilität mit altem Frontend (falls nötig)
     @GetMapping("/with-display-names")
     public Map<String, String> getCategoriesWithDisplayNames() {
         Map<String, String> categories = new LinkedHashMap<>();

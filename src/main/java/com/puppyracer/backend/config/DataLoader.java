@@ -23,7 +23,7 @@ public class DataLoader {
             // 2. BENUTZER LADEN
             loadUsers(userRepository);
         
-            // 3. TESTBESTELLUNGEN LADEN (KORRIGIERT!)
+            // 3. TESTBESTELLUNGEN LADEN 
             loadTestOrders(productRepository, userRepository, orderRepository);
             
             System.out.println("=== DATABASE INITIALIZATION COMPLETE ===");
@@ -34,7 +34,6 @@ public class DataLoader {
         if (productRepository.count() == 0) {
             System.out.println("Loading products...");
             
-            // ===== LEINEN & GESCHIRRE =====
             Product leash1 = new Product();
             leash1.setTitle("Premium Lederleine");
             leash1.setDescription("Hochwertige handgefertigte Lederleine aus dunklem Leder für Hunde, 2m Länge");
@@ -59,7 +58,7 @@ public class DataLoader {
             harness.setImageUrl("Hundeleine-Stoff.png");
             productRepository.save(harness);
 
-            // ===== HALSBÄNDER & HALSKETTEN =====
+
             Product collar1 = new Product();
             collar1.setTitle("Hundehalsband Türkis");
             collar1.setDescription("Schönes Halsband in Türkis, wasserfest");
@@ -84,7 +83,7 @@ public class DataLoader {
             necklace.setImageUrl("Hundehalsband-premium.png");
             productRepository.save(necklace);
 
-            // ===== HUNDEBEKLEIDUNG =====
+
             Product jacket = new Product();
             jacket.setTitle("Warme Jacke in Blau");
             jacket.setDescription("Wasserdichte Jacke für den Herbst");
@@ -109,7 +108,7 @@ public class DataLoader {
             hoodie.setImageUrl("Hundejacke-Schwarz.png");
             productRepository.save(hoodie);
 
-            // ===== LECKERLIS & SNACKS =====
+
             Product snack1 = new Product();
             snack1.setTitle("Pedigree Premium Futter");
             snack1.setDescription("Hochwertiges Trockenfutter für ausgewogene Ernährung");
@@ -143,7 +142,6 @@ public class DataLoader {
     private void loadUsers(UserRepository userRepository) {
         System.out.println("Loading users...");
         
-        // KORREKTE AUTH0 IDs (aus deiner Datenbank)
         String adminOauthId = "auth0|6942b5a749c4d1b989dbf9ad";
         String buyerOauthId = "auth0|6942b6bd49c4d1b989dbfa45";
         
@@ -184,7 +182,6 @@ public class DataLoader {
         if (orderRepository.count() == 0) {
             System.out.println("Creating test orders...");
             
-            // KORREKTE ID VERWENDEN (aus loadUsers())
             String buyerOauthId = "auth0|6942b6bd49c4d1b989dbfa45";
             
             System.out.println("Looking for buyer with oauthId: " + buyerOauthId);

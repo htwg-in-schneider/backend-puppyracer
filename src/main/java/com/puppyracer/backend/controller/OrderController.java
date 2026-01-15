@@ -31,7 +31,6 @@ public class OrderController {
         this.userRepository = userRepository;
     }
     
-    // ============ HELPER METHOD ============
     private boolean userFromJwtIsAdmin(Jwt jwt) {
         if (jwt == null) {
             return false;
@@ -52,7 +51,6 @@ public class OrderController {
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
     
-    // ===================== BESTELLUNG ERSTELLEN =====================
     
     @PostMapping
     public ResponseEntity<Order> createOrder(
@@ -106,8 +104,7 @@ public class OrderController {
             return ResponseEntity.badRequest().build();
         }
     }
-    
-    // ===================== BESTELLUNG NACH ID LADEN =====================
+
     
     @GetMapping("/{id}")
     public ResponseEntity<Order> getOrderById(
@@ -133,8 +130,6 @@ public class OrderController {
             return ResponseEntity.notFound().build();
         }
     }
-    
-    // ===================== BESTELLUNG NACH ORDER-NUMMER LADEN =====================
     
     @GetMapping("/number/{orderNumber}")
     public ResponseEntity<Order> getOrderByNumber(
@@ -163,8 +158,6 @@ public class OrderController {
             return ResponseEntity.notFound().build();
         }
     }
-    
-    // ===================== ADMIN ENDPOINTS =====================
     
     @GetMapping("/admin")
     public ResponseEntity<List<Order>> getAllOrdersAdmin(@AuthenticationPrincipal Jwt jwt) {
@@ -202,8 +195,6 @@ public class OrderController {
         return ResponseEntity.ok(savedOrder);
     }
     
-    // ===================== USER ENDPOINTS =====================
-    
     @GetMapping("/my-orders")
     public ResponseEntity<List<Order>> getMyOrders(@AuthenticationPrincipal Jwt jwt) {
         log.info("GET /api/orders/my-orders called");
@@ -222,8 +213,7 @@ public class OrderController {
             return ResponseEntity.status(403).build();
         }
     }
-    
-    // ===================== DTO =====================
+
     
     public static class StatusUpdateRequest {
         private String status;

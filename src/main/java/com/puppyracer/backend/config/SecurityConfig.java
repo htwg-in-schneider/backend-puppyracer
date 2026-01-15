@@ -23,29 +23,27 @@ public class SecurityConfig {
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
-            
-            // ============ CORS KONFIGURATION ============
-            // ZUERST CORS OPTIONS erlauben
+
             .authorizeHttpRequests(auth -> auth
-                // SEHR WICHTIG: OPTIONS vor allen anderen Regeln
+                
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 
-                // ÖFFENTLICHE ENDPUNKTE
+               
                 .requestMatchers("/").permitAll()
                 .requestMatchers("/error").permitAll()
                 .requestMatchers("/actuator/health").permitAll()
                 
-                // PRODUKTE LESEN (alle)
+               
                 .requestMatchers(HttpMethod.GET, "/api/product/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/category/**").permitAll()
                 
-                // PRODUKTE SCHREIBEN (nur authentifiziert)
+                
                 .requestMatchers(HttpMethod.POST, "/api/product/**").authenticated()
                 .requestMatchers(HttpMethod.PUT, "/api/product/**").authenticated()
                 .requestMatchers(HttpMethod.DELETE, "/api/product/**").authenticated()
                 
-                // ALLE ANDEREN REQUESTES erfordern Authentifizierung
+               
                 .anyRequest().authenticated()
             )
             
@@ -54,7 +52,7 @@ public class SecurityConfig {
             )
             
             .headers(headers -> headers
-                .frameOptions(frame -> frame.disable())  // Für H2 Console wenn nötig
+                .frameOptions(frame -> frame.disable()) 
             )
             
             .build();

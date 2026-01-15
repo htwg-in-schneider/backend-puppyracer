@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "order_items")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // ← NEU
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
 public class OrderItem {
     
     @Id
@@ -33,8 +33,7 @@ public class OrderItem {
         this.price = price;
         this.quantity = quantity;
     }
-    
-    // Getter & Setter
+ 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     

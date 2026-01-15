@@ -90,8 +90,7 @@ public class Order {
         this.country = "Deutschland";
         this.paymentMethod = "INVOICE";
     }
-    
-    // Getter & Setter (alle vorhanden, gleiche wie vorher)
+   
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     

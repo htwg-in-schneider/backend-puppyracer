@@ -24,7 +24,7 @@ public class Review {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
-    @JsonIgnoreProperties({"reviews"}) // Verhindert zirkuläre Referenzen
+    @JsonIgnoreProperties({"reviews"})
     private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -32,11 +32,10 @@ public class Review {
     @JsonIgnoreProperties({"reviews"})
     private User user;
 
-    // NEU: Erstellungsdatum für Sortierung
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    // Getter + Setter
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -60,7 +59,6 @@ public class Review {
         return user != null ? user.getName() : null;
     }
 
-    // Automatisches Setzen des Erstellungsdatums
     @PrePersist
     protected void onCreate() {
         if (createdAt == null) {
